@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
 
@@ -8,10 +9,51 @@
         android:layout_height="match_parent"
         tools:context=".ui.storyscreen.HomeFragment">
 
+        <com.facebook.shimmer.ShimmerFrameLayout xmlns:shimmer="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/shimmer_loading"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            shimmer:duration="800"
+            shimmer:shimmer_auto_start="true">
+
+            <!-- Adding 7 rows of placeholders -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <include layout="@layout/placeholder_loading" />
+
+                <include layout="@layout/placeholder_loading" />
+
+                <include layout="@layout/placeholder_loading" />
+
+                <include layout="@layout/placeholder_loading" />
+
+                <include layout="@layout/placeholder_loading" />
+                <include layout="@layout/placeholder_loading" />
+                <include layout="@layout/placeholder_loading" />
+            </LinearLayout>
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
         <androidx.recyclerview.widget.RecyclerView
+
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btn_to_add_story"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:src="@drawable/ic_baseline_add_24"
+            app:elevation="2dp"
+            app:tint="@color/white"
+            app:useCompatPadding="true"
+            android:contentDescription="@string/add_story" />
     </FrameLayout>
 </layout>

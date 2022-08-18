@@ -24,19 +24,10 @@ interface StoryApi {
 
     @Multipart
     @POST(Constant.STORIES_ENDPOINT)
-    @Headers("Content-Type: multipart/form-data")
     suspend fun addStories(
         @Header("Authorization") token: String,
-        @Part image: MultipartBody.Part,
-        @Part("description") deskripsi: RequestBody,
-    ): ResponseBody
-
-
-    @Multipart
-    @POST(Constant.ADDSTORY_NOAUTH_ENDPOINT)
-    suspend fun addStoriesGuest(
-        @Part image: MultipartBody.Part,
-        @Part("description") deskripsi: RequestBody,
+        @Part image: MultipartBody.Part?,
+        @Part("description") deskripsi: RequestBody?,
     ): ResponseBody
 
 

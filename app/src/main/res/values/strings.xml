@@ -1,4 +1,27 @@
 <resources>
     <string name="app_name">StoryApp</string>
-    <string name="sign_in">Sign in</string>
+    <string name="str_login">masuk</string>
+    <string name="application_logo">Application Logo</string>
+    <string name="btn_txt_daftar">Daftar</string>
+    <string name="detaiL_nama">Nama</string>
+    <string name="detail_screen_deskripsi">Deskripsi</string>
+    <string name="open_gallery">Buka Gallery</string>
+    <string name="take_picture">Ambil Gambar</string>
+    <string name="story_image_desc">Story Image</string>
+    <string name="desciption_hint">Desciption</string>
+    <string name="submit_btn">Submit</string>
+    <string name="btn_logout">Keluar</string>
+    <string name="btn_batal">Batal</string>
+    <string name="logout_confirm">Apa anda yakin akan keluar aplikasi?</string>
+    <string name="logout_confirm_judul">Konfirmasi Keluar</string>
+    <string name="menu_logout">Keluar</string>
+    <string name="str_daftar_user">Pendaftaran User</string>
+    <string name="str_nama">Nama</string>
+    <string name="str_daftar">Daftar</string>
+    <string name="str_password">Password</string>
+    <string name="str_email">Email</string>
+    <string name="add_story">Add Story</string>
+    <string name="password_error">Password Tidak Boleh Kurang dari 6 Character</string>
+    <string name="image_story">Image Story</string>
+
 </resources>

@@ -32,14 +32,14 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun providesmoshi() = Moshi.Builder()
+    fun providesMoshi(): Moshi = Moshi.Builder()
         .add(KotlinJsonAdapterFactory())
         .build()
 
 
     @Provides
     @Singleton
-    fun ProvideClient() = OkHttpClient()
+    fun provideClient(): OkHttpClient = OkHttpClient()
         .newBuilder()
         .also { client ->
             if (BuildConfig.DEBUG) {
@@ -62,10 +62,10 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun ProvideRetrofit(
+    fun provideRetrofit(
         client: OkHttpClient,
         moshi: Moshi
-    ) = Retrofit
+    ): Retrofit = Retrofit
         .Builder()
         .baseUrl(Constant.BASE_URL)
         .client(client)
@@ -77,7 +77,7 @@ object AppModule {
     @Singleton
     fun provideApiService(
         retrofit: Retrofit
-    ) = retrofit.create(StoryApi::class.java)
+    ): StoryApi = retrofit.create(StoryApi::class.java)
 
 
     @Provides

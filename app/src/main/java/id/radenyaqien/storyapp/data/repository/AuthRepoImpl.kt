@@ -3,12 +3,13 @@ package id.radenyaqien.storyapp.data.repository
 import id.radenyaqien.storyapp.data.datastore.UserPreff
 import id.radenyaqien.storyapp.data.remote.RemoteDataSource
 import id.radenyaqien.storyapp.data.remote.model.LoginResponse
-import id.radenyaqien.storyapp.domain.repository.AuthRepository
 import id.radenyaqien.storyapp.domain.model.User
+import id.radenyaqien.storyapp.domain.repository.AuthRepository
 import id.radenyaqien.storyapp.util.MyResource
 import id.radenyaqien.storyapp.util.toUser
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class AuthRepoImpl @Inject constructor(
@@ -21,8 +22,15 @@ class AuthRepoImpl @Inject constructor(
         password: String
     ): Flow<MyResource<LoginResponse>> {
         val loginResponse = dataSource.login(email, password)
-        val res = loginResponse.first().data?.loginResult
-        res?.toUser()?.let { userPreff.save(it) }
+        loginResponse.map {
+            it.data?.loginResult?.toUser()
+        }.collectLatest {
+            if (it != null) {
+                saveUser(it)
+            }
+        }
+
+
         return loginResponse
     }
 
@@ -36,10 +44,9 @@ class AuthRepoImpl @Inject constructor(
         userPreff.clear()
     }
 
-    override fun getCurrentUser(): Flow<User> = userPreff.user
-    override fun isLoggedIn(): Flow<Boolean> {
-        return userPreff.isLogin
-    }
+    override fun getCurrentUser(): Flow<User?> = userPreff.user
+    override fun isLoggedIn() = userPreff.isLogin
+
 
     override suspend fun saveUser(user: User) {
         userPreff.save(user)

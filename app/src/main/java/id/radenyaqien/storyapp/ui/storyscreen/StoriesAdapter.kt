@@ -1,21 +1,23 @@
 package id.radenyaqien.storyapp.ui.storyscreen
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import id.radenyaqien.storyapp.databinding.ItemStoriesBinding
 import id.radenyaqien.storyapp.domain.model.Stories
 
-class StoriesAdapter(private val clickListener: (Stories) -> Unit) :
+class StoriesAdapter(private val clickListener: (Stories, ImageView) -> Unit) :
     ListAdapter<Stories, StoriesAdapter.StoriesViewHolder>(StoriesDiffCallback()) {
 
+    class StoriesViewHolder(private val binding: ItemStoriesBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
-    class StoriesViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val binding = ItemStoriesBinding.bind(view)
-        fun onbind(stories: Stories, onClickListener: View.OnClickListener) {
-            binding.root.setOnClickListener(onClickListener)
+        fun onbind(stories: Stories, clickListener: (Stories, ImageView) -> Unit) {
+            binding.root.setOnClickListener {
+                clickListener.invoke(stories, binding.imgPhoto)
+            }
             binding.model = stories
         }
     }
@@ -27,15 +29,11 @@ class StoriesAdapter(private val clickListener: (Stories) -> Unit) :
                 LayoutInflater.from(parent.context),
                 parent,
                 false
-            ).root
+            )
         )
     }
 
     override fun onBindViewHolder(holder: StoriesViewHolder, position: Int) {
-        holder.onbind(getItem(position)) {
-            clickListener(getItem(position))
-        }
-
-
+        holder.onbind(getItem(position), clickListener)
     }
 }

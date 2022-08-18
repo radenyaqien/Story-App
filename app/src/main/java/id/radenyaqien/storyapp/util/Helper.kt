@@ -8,7 +8,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import coil.load
-import coil.transform.CircleCropTransformation
+import coil.transform.RoundedCornersTransformation
 import id.radenyaqien.storyapp.R
 import id.radenyaqien.storyapp.data.remote.model.LoginResult
 import id.radenyaqien.storyapp.data.remote.model.StoriesModel
@@ -27,6 +27,7 @@ import retrofit2.HttpException
 fun <Api> safeApiCall(
     apiCall: suspend () -> Api
 ) = flow<MyResource<Api>> {
+    emit(MyResource.Loading())
     runCatching {
         apiCall.invoke()
     }.onSuccess {
@@ -112,10 +113,9 @@ fun StoriesModel.toStories(): List<Stories> {
 fun ImageView.loadImage(url: String) {
     load(url) {
         crossfade(true)
-        transformations(CircleCropTransformation())
+        transformations(RoundedCornersTransformation(20f))
         placeholder(R.drawable.ic_launcher_background)
         error(R.drawable.ic_launcher_background)
     }
 }
-
 

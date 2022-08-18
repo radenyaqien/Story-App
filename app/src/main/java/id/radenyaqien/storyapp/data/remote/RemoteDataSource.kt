@@ -3,6 +3,8 @@ package id.radenyaqien.storyapp.data.remote
 import id.radenyaqien.storyapp.util.safeApiCall
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import java.io.File
 import javax.inject.Inject
 
 class RemoteDataSource
@@ -29,12 +31,19 @@ class RemoteDataSource
         )
     }
 
-    fun addStories(token: String, deskripsi: RequestBody, image: MultipartBody.Part) =
+    fun addStories(token: String, deskripsi: RequestBody?, image: File?) =
         safeApiCall {
-            api.addStories(token, image, deskripsi)
+            api.addStories(
+                "Bearer $token",
+                image?.asRequestBody()
+                    ?.let { MultipartBody.Part.createFormData("photo", image.name, it) },
+                deskripsi
+            )
         }
 
     fun fetchAllStory(token: String) = safeApiCall {
-        api.fetchStories(token)
+        api.fetchStories("Bearer $token")
     }
+
+
 }

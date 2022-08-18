@@ -2,66 +2,71 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_graph.xml"
-    app:startDestination="@id/listFragment">
+    app:startDestination="@id/loginFragment">
 
     <fragment
         android:id="@+id/addStoryFragment"
         android:name="id.radenyaqien.storyapp.ui.addstoryscreen.AddStoryFragment"
-        android:label="add_story_fragment"
-        tools:layout="@layout/add_story_fragment">
-        <action
-            android:id="@+id/action_addStoryFragment_to_listFragment"
-            app:destination="@id/listFragment" />
-    </fragment>
+        android:label="Tambah Story"
+        tools:layout="@layout/add_story_fragment" />
     <fragment
         android:id="@+id/detilStoryFragment"
         android:name="id.radenyaqien.storyapp.ui.detilscreen.DetilStoryFragment"
-        android:label="detil_story_fragment"
+        android:label="Detail Story"
         tools:layout="@layout/detil_story_fragment">
-
+        <argument
+            android:name="stories"
+            app:argType="id.radenyaqien.storyapp.domain.model.Stories" />
     </fragment>
     <fragment
         android:id="@+id/listFragment"
         android:name="id.radenyaqien.storyapp.ui.storyscreen.HomeFragment"
-        android:label="list_fragment"
+        android:label="Beranda"
         tools:layout="@layout/home_fragment">
         <action
             android:id="@+id/action_listFragment_to_detilStoryFragment"
-            app:destination="@id/detilStoryFragment">
-            <argument
-                android:name="stories"
-                android:defaultValue="null"
-                app:argType="string"
-                app:nullable="true" />
-        </action>
+            app:destination="@id/detilStoryFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
 
         <action
             android:id="@+id/action_listFragment_to_addStoryFragment"
             app:destination="@id/addStoryFragment" />
-        <action
-            android:id="@+id/action_listFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
         android:name="id.radenyaqien.storyapp.ui.loginscreen.LoginFragment"
-        android:label="login_fragment"
+        android:label="Login"
         tools:layout="@layout/login_fragment">
         <action
             android:id="@+id/action_loginFragment_to_registerFragment"
             app:destination="@id/registerFragment" />
         <action
             android:id="@+id/action_loginFragment_to_listFragment"
-            app:destination="@id/listFragment" />
+            app:destination="@id/listFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
         android:name="id.radenyaqien.storyapp.ui.registerscreen.RegisterFragment"
-        android:label="register_fragment"
+        android:label="Daftar"
         tools:layout="@layout/register_fragment">
         <action
             android:id="@+id/action_registerFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
     </fragment>
+
+    <dialog
+        android:id="@+id/nav_logout"
+        android:name="id.radenyaqien.storyapp.ui.logoutdialog.LogoutFragment"
+        android:label="LogoutFragment" >
+        <action
+            android:id="@+id/action_logoutFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/listFragment"
+            app:popUpToInclusive="true" />
+    </dialog>
 </navigation>

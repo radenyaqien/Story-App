@@ -7,25 +7,23 @@ import id.radenyaqien.storyapp.domain.repository.StoryRepository
 import id.radenyaqien.storyapp.util.MyResource
 import id.radenyaqien.storyapp.util.map
 import id.radenyaqien.storyapp.util.toStories
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.map
-import okhttp3.MultipartBody
+import kotlinx.coroutines.flow.mapNotNull
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
+import java.io.File
 import javax.inject.Inject
 
 class StoriesRepoImpl @Inject constructor(
     private val remoteDataSource: RemoteDataSource,
     private val userPreff: UserPreff
-
 ) : StoryRepository {
-    override suspend fun getStories(): Flow<MyResource<List<Stories>>> {
-        val token = userPreff.user.map {
-            it.token
-        }
+    override suspend fun getStories(token: String): Flow<MyResource<List<Stories>>> {
 
-        return remoteDataSource.fetchAllStory(token.first()).map {
+        return remoteDataSource.fetchAllStory(token).map {
             it.map { stories ->
                 stories.toStories()
             }
@@ -33,13 +31,15 @@ class StoriesRepoImpl @Inject constructor(
 
     }
 
+    @OptIn(FlowPreview::class)
     override suspend fun addStory(
-        deskripsi: RequestBody,
-        image: MultipartBody.Part
+        deskripsi: RequestBody?,
+        image: File?
     ): Flow<MyResource<ResponseBody>> {
-        val token = userPreff.user.first {
-            it.token != ""
-        }.token
-        return remoteDataSource.addStories(token, deskripsi, image)
+        return userPreff.user.mapNotNull { it }.flatMapConcat {
+            remoteDataSource.addStories(it.token, deskripsi, image)
+        }
     }
+
+
 }

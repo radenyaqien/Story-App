@@ -6,6 +6,6 @@ import javax.inject.Inject
 class GetStoriesUsecase @Inject constructor(
     private val storyRepository: StoryRepository
 ) {
-    suspend operator fun invoke() = storyRepository.getStories()
+    suspend operator fun invoke(token: String) = storyRepository.getStories(token)
 
 }

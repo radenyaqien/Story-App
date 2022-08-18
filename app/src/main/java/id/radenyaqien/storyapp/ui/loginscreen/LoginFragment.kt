@@ -1,20 +1,20 @@
 package id.radenyaqien.storyapp.ui.loginscreen
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import id.radenyaqien.storyapp.databinding.LoginFragmentBinding
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import id.radenyaqien.storyapp.util.launchAndCollectIn
+
 
 @AndroidEntryPoint
 class LoginFragment : Fragment(), View.OnClickListener {
@@ -22,7 +22,6 @@ class LoginFragment : Fragment(), View.OnClickListener {
     private val viewModel: LoginViewModel by viewModels()
     private var _binding: LoginFragmentBinding? = null
     private val binding get() = requireNotNull(_binding)
-    private lateinit var savedStateHandle: SavedStateHandle
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -33,49 +32,72 @@ class LoginFragment : Fragment(), View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        savedStateHandle = findNavController().previousBackStackEntry!!.savedStateHandle
-        savedStateHandle.set(LOGIN_SUCCESSFUL, false)
-        binding.btnToregister.setOnClickListener(this)
-        binding.btnSignin.setOnClickListener(this)
-        lifecycleScope.launchWhenStarted {
-            viewModel.loginState.onEach {
-                if (it.error != null) {
-                    Snackbar.make(binding.root, it.error.toString(), Snackbar.LENGTH_SHORT)
-                        .show()
-                }
 
-                if (it.user != null) {
+        binding.btnRegister.setOnClickListener(this)
+        binding.btnLogin.setOnClickListener(this)
+        collectState()
+        playAnimation()
 
-                    savedStateHandle.set(LOGIN_SUCCESSFUL, true)
-                    findNavController().popBackStack()
-                }
-                if (it.isloading) {
+    }
 
-                }
-            }.flowWithLifecycle(viewLifecycleOwner.lifecycle)
-                .launchIn(this)
+    private fun collectState() {
+        viewModel.loginState.launchAndCollectIn(viewLifecycleOwner) {
+            showMessage(it.error)
+            checkLogin(it.isLoggedIn)
+            showLoading(it.isloading)
+        }
+    }
 
+    private fun playAnimation() {
+        val email = ObjectAnimator.ofFloat(binding.tilEmail, View.ALPHA, 0f, 1f).setDuration(500)
+        val password =
+            ObjectAnimator.ofFloat(binding.tilPassword, View.ALPHA, 0f, 1f).setDuration(500)
+        val btnlogin = ObjectAnimator.ofFloat(binding.btnLogin, View.ALPHA, 0f, 1f).setDuration(500)
+        val btnRegister =
+            ObjectAnimator.ofFloat(binding.btnRegister, View.ALPHA, 0f, 1f)
+                .setDuration(500)
+        AnimatorSet().apply {
+            playSequentially(email, password, btnlogin, btnRegister)
+            startDelay = 200
+            start()
+        }
+    }
+
+    private fun showLoading(isloading: Boolean) {
+        binding.progressCircular.isVisible = isloading
+        binding.btnLogin.isEnabled = !isloading
+    }
+
+    private fun showMessage(error: String?) {
+        error?.let {
+            Snackbar.make(binding.root, error, Snackbar.LENGTH_SHORT).show()
+            viewModel.setMessage(null)
         }
 
+    }
 
+    private fun navigateToRegisterScreen() {
+        findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment())
+    }
+
+    private fun checkLogin(isLoginSuccess: Boolean) {
+        if (isLoginSuccess) {
+            findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToListFragment())
+        }
     }
 
     override fun onClick(p0: View?) {
         when (p0) {
-            binding.btnSignin -> {
+            binding.btnLogin -> {
                 viewModel.login(
-                    binding.tilUsername.editText?.text.toString(),
+                    binding.tilEmail.editText?.text.toString(),
                     binding.tilPassword.editText?.text.toString()
                 )
             }
-            binding.btnToregister -> {
-                findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment())
+            binding.btnRegister -> {
+                navigateToRegisterScreen()
             }
         }
-
     }
 
-    companion object {
-        const val LOGIN_SUCCESSFUL: String = "LOGIN_SUCCESSFUL"
-    }
 }
