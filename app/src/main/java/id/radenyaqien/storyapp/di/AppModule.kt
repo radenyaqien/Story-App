@@ -1,6 +1,7 @@
 package id.radenyaqien.storyapp.di
 
 import android.content.Context
+import androidx.room.Room
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -10,6 +11,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import id.radenyaqien.storyapp.BuildConfig
 import id.radenyaqien.storyapp.data.datastore.UserPreff
+import id.radenyaqien.storyapp.data.local.AppDatabase
 import id.radenyaqien.storyapp.data.remote.RemoteDataSource
 import id.radenyaqien.storyapp.data.remote.StoryApi
 import id.radenyaqien.storyapp.data.repository.AuthRepoImpl
@@ -102,5 +104,15 @@ object AppModule {
         userPreff: UserPreff
     ): StoryRepository = StoriesRepoImpl(remoteDataSource, userPreff)
 
+    @Provides
+    @Singleton
+    fun provideDatabase(@ApplicationContext context: Context) : AppDatabase {
 
+        return Room.databaseBuilder(
+            context.applicationContext,
+            AppDatabase::class.java,
+            Constant.DATABASE_NAME
+        ).fallbackToDestructiveMigration()
+            .build()
+    }
 }
