@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         arguments: Bundle?
     ) {
         when (destination.id) {
-            R.id.loginFragment, R.id.registerFragment -> {
+            R.id.loginFragment, R.id.registerFragment, R.id.nav_maps -> {
                 supportActionBar?.hide()
             }
             else -> {

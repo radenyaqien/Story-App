@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/nav_maps"
+        android:icon="@drawable/ic_baseline_map_24"
+        android:title="@string/menu_logout"
+        app:showAsAction="always" />
+    <item
+        android:title="@string/menu_logout"
         android:id="@+id/nav_logout"
         android:icon="@drawable/ic_baseline_exit_to_app_24"
-        android:title="@string/menu_logout" />
+        app:showAsAction="ifRoom" />
+
 </menu>

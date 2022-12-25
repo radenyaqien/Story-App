@@ -11,14 +11,18 @@
         <entry key="app/src/main/res/drawable/ic_baseline_close_24.xml" value="0.105" />
         <entry key="app/src/main/res/drawable/ic_baseline_person_pin_24.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.2123076923076923" />
+        <entry key="app/src/main/res/layout/activity_maps.xml" value="0.1" />
         <entry key="app/src/main/res/layout/add_story_fragment.xml" value="0.2123076923076923" />
+        <entry key="app/src/main/res/layout/content_maps.xml" value="0.1" />
         <entry key="app/src/main/res/layout/detil_story_fragment.xml" value="0.2123076923076923" />
         <entry key="app/src/main/res/layout/fragment_blank.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_first.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_logout.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/fragment_second.xml" value="0.1" />
         <entry key="app/src/main/res/layout/home_fragment.xml" value="0.13" />
         <entry key="app/src/main/res/layout/item_stories.xml" value="0.2123076923076923" />
         <entry key="app/src/main/res/layout/list_fragment.xml" value="0.2123076923076923" />
-        <entry key="app/src/main/res/layout/login_fragment.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/login_fragment.xml" value="0.25" />
         <entry key="app/src/main/res/layout/placeholder_loading.xml" value="0.21128205128205127" />
         <entry key="app/src/main/res/layout/register_fragment.xml" value="0.2418918918918919" />
         <entry key="app/src/main/res/layout/sample_my_edit_text.xml" value="0.2015625" />

@@ -9,7 +9,7 @@ class AddStoriUsecase @Inject constructor(
     private val repo: StoryRepository
 ) {
 
-    suspend operator fun invoke(deskripsi: RequestBody?, image: File?) =
+    operator fun invoke(deskripsi: RequestBody?, image: File?) =
         repo.addStory(deskripsi, image)
 
 }

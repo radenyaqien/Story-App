@@ -11,8 +11,6 @@ import coil.load
 import coil.transform.RoundedCornersTransformation
 import id.radenyaqien.storyapp.R
 import id.radenyaqien.storyapp.data.remote.model.LoginResult
-import id.radenyaqien.storyapp.data.remote.model.StoriesModel
-import id.radenyaqien.storyapp.domain.model.Stories
 import id.radenyaqien.storyapp.domain.model.User
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -95,23 +93,12 @@ fun LoginResult.toUser() = User(
     token = this.token
 )
 
-fun StoriesModel.toStories(): List<Stories> {
-    return this.listStory.map {
-        Stories(
-            photoUrl = it.photoUrl,
-            id = it.id,
-            name = it.name,
-            description = it.description,
-            createdAt = it.createdAt,
-            lat = it.lat,
-            lon = it.lon
-        )
-    }
-}
+
 
 @BindingAdapter("setImageUrl")
 fun ImageView.loadImage(url: String) {
     load(url) {
+
         crossfade(true)
         transformations(RoundedCornersTransformation(20f))
         placeholder(R.drawable.ic_launcher_background)

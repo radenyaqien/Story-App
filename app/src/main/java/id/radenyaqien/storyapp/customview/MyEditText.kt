@@ -63,6 +63,8 @@ class MyEditText : AppCompatEditText, View.OnTouchListener {
         )
     }
 
+
+
     override fun onTouch(v: View?, event: MotionEvent): Boolean {
         if (compoundDrawables[2] != null) {
             var isClearButtonClicked = false

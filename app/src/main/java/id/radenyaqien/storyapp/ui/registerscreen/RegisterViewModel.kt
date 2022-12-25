@@ -3,13 +3,13 @@ package id.radenyaqien.storyapp.ui.registerscreen
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import id.radenyaqien.storyapp.data.remote.model.RegisterResponse
 import id.radenyaqien.storyapp.domain.authusecase.RegisterUsecase
 import id.radenyaqien.storyapp.util.doIfFailure
 import id.radenyaqien.storyapp.util.doIfLoading
 import id.radenyaqien.storyapp.util.doIfSuccess
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import okhttp3.ResponseBody
 import javax.inject.Inject
 
 @HiltViewModel
@@ -28,15 +28,19 @@ class RegisterViewModel @Inject constructor(
             resource.doIfLoading {
                 setLoading()
             }
-            resource.doIfSuccess {
-                setData(it)
+            resource.doIfSuccess { result ->
+                setData(result)
             }
         }.launchIn(this)
     }
 
-    private fun setData(data: ResponseBody) {
+    private fun setData(data: RegisterResponse) {
         _registerState.update {
-            it.copy(isloading = false, user = data)
+            it.copy(
+                msg = data.message,
+                isloading = false,
+                isRegisterSuccess = !data.error
+            )
         }
     }
 
@@ -49,7 +53,10 @@ class RegisterViewModel @Inject constructor(
 
     fun setMessage(message: String?) {
         _registerState.update {
-            it.copy(error = message, isloading = false)
+            it.copy(
+                msg = message,
+                isloading = false
+            )
         }
     }
 

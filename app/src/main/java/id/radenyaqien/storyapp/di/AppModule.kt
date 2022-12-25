@@ -101,18 +101,25 @@ object AppModule {
     @Singleton
     fun providestoriesRepos(
         remoteDataSource: RemoteDataSource,
-        userPreff: UserPreff
-    ): StoryRepository = StoriesRepoImpl(remoteDataSource, userPreff)
+        userPreff: UserPreff,
+        appDatabase: AppDatabase
+    ): StoryRepository = StoriesRepoImpl(remoteDataSource, userPreff, appDatabase)
 
     @Provides
     @Singleton
-    fun provideDatabase(@ApplicationContext context: Context) : AppDatabase {
-
+    fun provideDatabase(@ApplicationContext context: Context): AppDatabase {
         return Room.databaseBuilder(
             context.applicationContext,
             AppDatabase::class.java,
             Constant.DATABASE_NAME
-        ).fallbackToDestructiveMigration()
-            .build()
+        ).build()
     }
+
+    @Provides
+    @Singleton
+    fun provideRemoteKeysDao(database: AppDatabase) = database.remotKeysDao()
+
+    @Provides
+    @Singleton
+    fun provideStoryDao(database: AppDatabase) = database.storyDao()
 }

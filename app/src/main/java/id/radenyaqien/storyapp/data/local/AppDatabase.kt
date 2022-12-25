@@ -8,7 +8,7 @@ import id.radenyaqien.storyapp.data.local.entity.RemoteKeys
 import id.radenyaqien.storyapp.data.local.entity.StoryEntity
 
 @Database(
-    entities = [StoryEntity::class, RemoteKeys::class], version = 1
+    entities = [StoryEntity::class, RemoteKeys::class], version = 1, exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
 

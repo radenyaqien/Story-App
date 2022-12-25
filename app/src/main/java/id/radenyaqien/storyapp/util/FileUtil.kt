@@ -10,13 +10,13 @@ import java.io.IOException
 import java.io.InputStream
 
 @Throws(IOException::class)
-fun getFile(context: Context, uri: Uri?): File? {
+fun getFile(context: Context, uri: Uri): File? {
     val destinationFilename =
-        File(context.filesDir.path + File.separatorChar + getFileName(context, uri!!))
+        File(context.filesDir.path + File.separatorChar + getFileName(context, uri))
     try {
-        context.contentResolver.openInputStream(uri).use { ins ->
+        context.contentResolver.openInputStream(uri)?.use { ins ->
             createFileFromStream(
-                ins!!,
+                ins,
                 destinationFilename
             )
         }

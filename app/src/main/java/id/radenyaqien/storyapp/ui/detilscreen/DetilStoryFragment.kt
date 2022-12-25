@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import androidx.transition.TransitionInflater
 import dagger.hilt.android.AndroidEntryPoint
+import id.radenyaqien.storyapp.R
 import id.radenyaqien.storyapp.databinding.DetilStoryFragmentBinding
 
 @AndroidEntryPoint
@@ -19,13 +20,9 @@ class DetilStoryFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val animation = TransitionInflater.from(requireContext()).inflateTransition(
-            android.R.transition.move
-        )
-        sharedElementEnterTransition = animation
-        sharedElementReturnTransition = animation
-    }
+        setSharedElementTransitionOnEnter()
 
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,6 +33,13 @@ class DetilStoryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         binding.model = args.stories
+        startPostponedEnterTransition()
+    }
+
+    private fun setSharedElementTransitionOnEnter() {
+        sharedElementEnterTransition = TransitionInflater.from(requireContext())
+            .inflateTransition(R.transition.shared_element_transition)
     }
 }

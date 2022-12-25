@@ -25,10 +25,10 @@ class LoginViewModel @Inject constructor(
         getUser().onEach {
             setUserLogin(it)
         }.launchIn(viewModelScope)
-
     }
 
     fun login(username: String, password: String) = viewModelScope.launch {
+        setLoading()
         loginUsecase(username, password).onEach { res ->
             when (res) {
                 is MyResource.Success -> {

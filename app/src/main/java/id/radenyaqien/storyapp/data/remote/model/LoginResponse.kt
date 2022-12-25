@@ -11,7 +11,7 @@ data class LoginResponse(
 	val error: Boolean? = null,
 
 	@Json(name = "message")
-	val message: String? = null
+	val message: String
 )
 
 data class LoginResult(

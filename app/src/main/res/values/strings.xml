@@ -23,5 +23,8 @@
     <string name="add_story">Add Story</string>
     <string name="password_error">Password Tidak Boleh Kurang dari 6 Character</string>
     <string name="image_story">Image Story</string>
+    <!-- Strings used for fragments for navigation -->
+
+    <string name="detail_screen_dibuat_pada">Di buat pada</string>
 
 </resources>

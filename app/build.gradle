@@ -60,9 +60,20 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.5.0'
     implementation 'com.google.android.material:material:1.6.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+
+
+    testImplementation "androidx.arch.core:core-testing:2.1.0"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4"
+    testImplementation 'org.mockito:mockito-core:4.4.0'
+    testImplementation "org.mockito.kotlin:mockito-kotlin:4.0.0"
+    testImplementation 'org.mockito:mockito-inline:4.4.0'
+    implementation 'androidx.test:core-ktx:1.4.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+
+    implementation "org.jetbrains.kotlinx:kotlinx-datetime:0.3.2"
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1'
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.5.1"
     // ViewModel and LiveData
@@ -71,7 +82,7 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:1.0.0")
     implementation("com.google.dagger:hilt-android:$hilt_version")
     kapt("com.google.dagger:hilt-android-compiler:$hilt_version")
-    implementation("io.coil-kt:coil:2.1.0")
+    implementation("io.coil-kt:coil:2.2.2")
 
     implementation 'androidx.paging:paging-common-ktx:3.1.1'
     implementation 'androidx.paging:paging-runtime-ktx:3.1.1'

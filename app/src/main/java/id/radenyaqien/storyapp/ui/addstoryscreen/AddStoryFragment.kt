@@ -23,22 +23,24 @@ import id.radenyaqien.storyapp.databinding.AddStoryFragmentBinding
 import id.radenyaqien.storyapp.ui.storyscreen.HomeFragment
 import id.radenyaqien.storyapp.util.getFile
 import id.radenyaqien.storyapp.util.launchAndCollectIn
+import id.radenyaqien.storyapp.util.reduceFileImage
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 
-private const val MAX_UPLOAD_SIZE = 1 * 1024 * 1024
-
 @AndroidEntryPoint
 class AddStoryFragment : Fragment(), View.OnClickListener {
+    private var fotoUri: Uri? = null
     private val viewmodel: AddStoryViewModel by viewModels()
     private var _binding: AddStoryFragmentBinding? = null
     private val binding get() = requireNotNull(_binding)
-    private val galleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) {
+    private val galleryLauncher = registerForActivityResult(
+        ActivityResultContracts
+            .GetContent()
+    ) {
         it?.let { uri ->
-            viewmodel.fotoUri = uri
+            fotoUri = uri
             setImage(uri)
-
         }
     }
     private val fotoLauncher = registerForActivityResult(
@@ -46,7 +48,7 @@ class AddStoryFragment : Fragment(), View.OnClickListener {
             .TakePicture()
     ) { result ->
         if (result) {
-            viewmodel.fotoUri?.let { uri ->
+            fotoUri?.let { uri ->
                 setImage(uri)
             }
         } else {
@@ -110,12 +112,12 @@ class AddStoryFragment : Fragment(), View.OnClickListener {
 
     private fun onAddStoryResult(isSuccess: Boolean) {
         if (isSuccess) {
+            Snackbar.make(binding.btnSubmit, "Berhasil Menambah Story", Snackbar.LENGTH_SHORT)
+                .show()
             findNavController().previousBackStackEntry?.savedStateHandle?.set(
                 HomeFragment.RESULT_ADD_STORIES,
                 true
             )
-            Snackbar.make(binding.btnSubmit, "Berhasil Menambah Story", Snackbar.LENGTH_SHORT)
-                .show()
             findNavController().popBackStack()
         }
     }
@@ -129,7 +131,7 @@ class AddStoryFragment : Fragment(), View.OnClickListener {
     private fun startTakePhoto() {
         lifecycleScope.launchWhenStarted {
             getTmpFileUri().let { uri ->
-                viewmodel.fotoUri = uri
+                fotoUri = uri
                 fotoLauncher.launch(uri)
             }
         }
@@ -157,8 +159,6 @@ class AddStoryFragment : Fragment(), View.OnClickListener {
     private fun setImage(uri: Uri?) {
         binding.imageView.setImageURI(uri)
     }
-
-    private fun isTooLargeFile(filesize: Long) = filesize > (MAX_UPLOAD_SIZE)
 
     override fun onClick(v: View?) {
         when (v) {
@@ -190,20 +190,21 @@ class AddStoryFragment : Fragment(), View.OnClickListener {
                 }
             }
             binding.btnSubmit -> {
-                val file = getFile(requireContext(), viewmodel.fotoUri)
+                if (fotoUri == null) {
+                    viewmodel.setMessage("Silahkan Pilih Gambar Terlebih dahulu")
+                    return
+                }
+
+                val file = getFile(requireContext(), checkNotNull(fotoUri))
                 if (file == null) {
                     viewmodel.setMessage("file tidak di temukan")
                     return
                 }
-                if (isTooLargeFile(file.length())) {
-                    viewmodel.setMessage("maximal ukuran file 1mb")
-                } else {
-                    viewmodel.addStory(
-                        binding.tilDesciption.editText?.text?.toString()
-                            ?.toRequestBody(MultipartBody.FORM),
-                        file
-                    )
-                }
+                viewmodel.addStory(
+                    binding.tilDesciption.editText?.text?.toString()
+                        ?.toRequestBody(MultipartBody.FORM),
+                    reduceFileImage(file)
+                )
 
             }
         }
