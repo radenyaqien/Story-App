@@ -37,7 +37,7 @@ class RegisterFragment : Fragment(), View.OnClickListener {
     private fun collectState() {
         viewmodel.registerState.launchAndCollectIn(viewLifecycleOwner) {
             showLoading(it.isloading)
-            showMessage(it.error)
+            showMessage(it.msg)
             if (it.isRegisterSuccess) {
                 navigateToLoginScreen()
             }
@@ -45,8 +45,9 @@ class RegisterFragment : Fragment(), View.OnClickListener {
     }
 
     private fun navigateToLoginScreen() {
-        findNavController().navigate(RegisterFragmentDirections.actionRegisterFragmentToLoginFragment())
+        findNavController().popBackStack()
     }
+
 
     private fun showMessage(error: String?) {
         error?.let {

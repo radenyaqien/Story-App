@@ -2,6 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
     app:startDestination="@id/loginFragment">
 
     <fragment
@@ -54,19 +55,21 @@
         android:name="id.radenyaqien.storyapp.ui.registerscreen.RegisterFragment"
         android:label="Daftar"
         tools:layout="@layout/register_fragment">
-        <action
-            android:id="@+id/action_registerFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
     </fragment>
 
     <dialog
         android:id="@+id/nav_logout"
         android:name="id.radenyaqien.storyapp.ui.logoutdialog.LogoutFragment"
-        android:label="LogoutFragment" >
+        android:label="LogoutFragment">
         <action
             android:id="@+id/action_logoutFragment_to_loginFragment"
             app:destination="@id/loginFragment"
             app:popUpTo="@id/listFragment"
             app:popUpToInclusive="true" />
     </dialog>
+    <fragment
+        android:id="@+id/nav_maps"
+        android:name="id.radenyaqien.storyapp.ui.mapscreen.MapsFragment"
+        android:label="Story Location"
+        tools:layout="@layout/fragment_maps" />
 </navigation>

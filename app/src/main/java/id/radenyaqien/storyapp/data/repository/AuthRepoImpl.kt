@@ -29,8 +29,6 @@ class AuthRepoImpl @Inject constructor(
                 saveUser(it)
             }
         }
-
-
         return loginResponse
     }
 

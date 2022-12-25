@@ -16,8 +16,10 @@ class LogoutViewModel @Inject constructor(
 
     val user = getCurrentUserUsecase.invoke()
 
-    fun logout() = viewModelScope.launch {
-        logoutUsecase.invoke()
+    fun logout() {
+        viewModelScope.launch {
+            logoutUsecase.invoke()
+        }
     }
 
 }

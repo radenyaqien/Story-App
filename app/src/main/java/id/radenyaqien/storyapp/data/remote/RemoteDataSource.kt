@@ -1,6 +1,10 @@
 package id.radenyaqien.storyapp.data.remote
 
+import id.radenyaqien.storyapp.data.remote.model.AddStoryResponse
+import id.radenyaqien.storyapp.data.remote.model.RegisterResponse
+import id.radenyaqien.storyapp.util.MyResource
 import id.radenyaqien.storyapp.util.safeApiCall
+import kotlinx.coroutines.flow.Flow
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -9,7 +13,7 @@ import javax.inject.Inject
 
 class RemoteDataSource
 @Inject constructor(
-    private val api: StoryApi
+    val api: StoryApi
 ) {
 
     fun login(email: String, password: String) = safeApiCall {
@@ -21,7 +25,11 @@ class RemoteDataSource
         )
     }
 
-    fun register(name: String, email: String, password: String) = safeApiCall {
+    fun register(
+        name: String,
+        email: String,
+        password: String
+    ): Flow<MyResource<RegisterResponse>> = safeApiCall {
         api.register(
             mapOf(
                 "email" to email,
@@ -31,7 +39,11 @@ class RemoteDataSource
         )
     }
 
-    fun addStories(token: String, deskripsi: RequestBody?, image: File?) =
+    fun addStories(
+        token: String,
+        deskripsi: RequestBody?,
+        image: File?
+    ): Flow<MyResource<AddStoryResponse>> =
         safeApiCall {
             api.addStories(
                 "Bearer $token",
@@ -42,7 +54,7 @@ class RemoteDataSource
         }
 
     fun fetchAllStory(token: String) = safeApiCall {
-        api.fetchStories("Bearer $token")
+        api.fetchStories("Bearer $token", location = 1)
     }
 
 

@@ -1,0 +1,79 @@
+Skenario Testing Story App
+
+HomeViewModel.kt
+1. Get Data paging sukses
+    - Memastikan getStoriesPagingUsecase di panggil 
+    - memastikan data snapshot tidak NULL
+    - memastikan jumlah data sesuai dengan yang di harapkan
+    - memastikan data sama dengan yang di harapkan
+    
+RegisterViewModel
+1. ketika register sukses
+    - Memastikan fungsi pada registerUsecase di panggil
+    - Memastikan state.msg tidak Null
+    - Memastikan state.msg sama dengan yang di harapkan
+    - Memastikan state.isRegisterSuccess sama dengan true
+2. Ketika register gagal
+    - Memastikan fungsi pada registerUsecase di panggil
+    - Memastikan state.msg tidak Null
+    - Memastikan state.msg sama dengan yang di harapkan
+    - Memastikan state.isRegisterSuccess sama dengan false
+        
+LoginViewModel
+1. when User Is Not Loggedin
+    - Memastikan fungsi pada getCurrentUserUsecase di panggil
+    - memastikan variable state.value.user sama dengan Null
+    - Memastikan variable state.value.isLoggedIn = false
+2. when User Is Loggedin
+    - Memastikan fungsi pada getCurrentUserUsecase di panggil
+    - memastikan variable state.value.user tidak Null
+    - Memastikan variable state.value.user sama dengan yang di harapkan        
+    - Memastikan variable state.value.isLoggedIn = true        
+3. when Login Success
+    - Memastikan fungsi pada loginUsecase di panggil
+    - memastikan variable state.value.user tidak Null
+    - Memastikan variable state.value.user.nama sama dengan yang di harapkan
+    - Memastikan variable state.value.user sama dengan yang di harapkan        
+    - Memastikan variable state.value.isLoggedIn = true        
+4. when Login Gagal
+    - Memastikan fungsi pada loginUsecase di panggil
+    - memastikan variable state.value.user Null
+    - Memastikan variable state.value.error sama dengan yang di harapkan        
+    - Memastikan variable state.value.isLoggedIn = false
+    
+LogoutViewModel
+1. get user
+    - Memastikan fungsi pada getCurrentUserUsecase di panggil
+    - memastikan variable state.value.user sama dengan Null
+    - memastikan variable state.value.user sma dengan yang di harapkan
+2. getNullUser
+    - Memastikan fungsi pada getCurrentUserUsecase di panggil
+    - memastikan variable state.value.user Null
+  
+3. Logout
+    - Memastikan fungsi pada logoutUsecase di panggil
+    - memastikan variable state.value.user Null
+    
+MapsViewModel
+1. Get data sukses
+    - Memastikan fungsi pada getStories di panggil 
+    - memastikan state.value.data tidak kosong
+    - memastikan jumlah data sesuai dengan yang di harapkan
+    - memastikan data sama dengan yang di harapkan
+    - memastikan state.value.msg sama dengan null
+2. Get Data kosong
+    - Memastikan fungsi pada getStories di panggil 
+    - memastikan state.value.data kosong
+    - memastikan state.value.msg sama dengan yang di harapkan
+    
+AddStoryViewModel
+1. Ketika Add Story sukses
+    - Memastikan fungsi pada addStoriUsecase di panggil 
+    - memastikan state.value tidak null
+    - memastikan state.value.errorMessage sama dengan null
+    - memastikan state value.isSuccess == true
+2. Ketika Add Story gagal
+    - Memastikan fungsi pada addStoriUsecase di panggil 
+    - memastikan state.value tidak null
+    - memastikan state.value.errorMessage sama dengan yang di harapkan
+    - memastikan state value.isSuccess == false

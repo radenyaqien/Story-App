@@ -16,7 +16,6 @@
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:contentDescription="@string/application_logo"
-            android:src="@drawable/ic_launcher_foreground"
             app:layout_constraintBottom_toTopOf="@+id/card_login_form"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"

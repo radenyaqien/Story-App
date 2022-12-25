@@ -18,7 +18,7 @@
 
         <ImageView
             android:contentDescription="@string/image_story"
-            android:transitionName="image_big"
+            android:transitionName="@{model.id}"
             android:id="@+id/img_photo"
             setImageUrl="@{model.photoUrl}"
             android:layout_width="0dp"

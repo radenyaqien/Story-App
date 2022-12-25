@@ -7,14 +7,15 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavDirections
+import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import id.radenyaqien.storyapp.databinding.HomeFragmentBinding
-import id.radenyaqien.storyapp.domain.model.Stories
-import id.radenyaqien.storyapp.util.launchAndCollectIn
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -24,10 +25,10 @@ class HomeFragment : Fragment() {
     private val binding get() = requireNotNull(_binding)
     private val mAdapter: StoriesAdapter by lazy {
         StoriesAdapter { stories, imgView ->
-            val extras = FragmentNavigatorExtras(imgView to "image_small")
+            val extras = FragmentNavigatorExtras(Pair(imgView, stories.id))
             val action =
                 HomeFragmentDirections.actionListFragmentToDetilStoryFragment(stories)
-            findNavController().navigate(action, extras)
+            navigate(action, extras)
         }
     }
 
@@ -41,47 +42,21 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        listenResult()
-        setupView()
-        collectState()
-    }
 
-    private fun listenResult() {
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Boolean>(
             RESULT_ADD_STORIES
-        )
-            ?.observe(
-                viewLifecycleOwner
-            ) { result ->
-                if (result) {
-                    viewmodel.stories()
-                }
+        )?.observe(viewLifecycleOwner) { isAddSuccessfully ->
+            if (isAddSuccessfully) {
+                mAdapter.refresh()
             }
-    }
-
-    private fun collectState() {
-        viewmodel.datastate.launchAndCollectIn(viewLifecycleOwner) {
-            showLoading(it.isLoading)
-            showMessage(it.error)
-            showData(it.listData)
         }
-    }
+        setupView()
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
 
-    private fun showLoading(isloading: Boolean) {
-        binding.shimmerLoading.isVisible = isloading
-        binding.recyclerView.isVisible = !isloading
-    }
-
-    private fun showData(user: List<Stories>) {
-
-        mAdapter.submitList(user)
-
-    }
-
-    private fun showMessage(str: String?) {
-        str?.let {
-            Snackbar.make(binding.recyclerView, str.toString(), Snackbar.LENGTH_SHORT).show()
-            viewmodel.setMessage(null)
+            viewmodel.data.flowWithLifecycle(viewLifecycleOwner.lifecycle).collect {
+                mAdapter.submitData(viewLifecycleOwner.lifecycle, it)
+                binding.shimmerLoading.isVisible = false
+            }
         }
 
     }
@@ -93,9 +68,22 @@ class HomeFragment : Fragment() {
             layoutManager = LinearLayoutManager(requireContext())
         }
         binding.btnToAddStory.setOnClickListener {
-            findNavController().navigate(HomeFragmentDirections.actionListFragmentToAddStoryFragment())
+            findNavController().navigate(
+                HomeFragmentDirections
+                    .actionListFragmentToAddStoryFragment()
+            )
+
         }
     }
+
+    private fun navigate(destination: NavDirections, extraInfo: FragmentNavigator.Extras) =
+        with(findNavController()) {
+            // 1
+            currentDestination?.getAction(destination.actionId)
+                ?.let {
+                    navigate(destination, extraInfo) //2 }
+                }
+        }
 
     companion object {
         const val RESULT_ADD_STORIES = "jkdsbfjhsdbfjhsdbjkf"

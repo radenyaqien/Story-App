@@ -1,6 +1,5 @@
 package id.radenyaqien.storyapp.ui.addstoryscreen
 
-import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -8,7 +7,9 @@ import id.radenyaqien.storyapp.domain.storiesusecase.AddStoriUsecase
 import id.radenyaqien.storyapp.util.doIfFailure
 import id.radenyaqien.storyapp.util.doIfLoading
 import id.radenyaqien.storyapp.util.doIfSuccess
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import okhttp3.RequestBody
 import java.io.File
@@ -19,13 +20,13 @@ class AddStoryViewModel @Inject constructor(
     private val addStoriUsecase: AddStoriUsecase
 ) : ViewModel() {
 
-    var fotoUri: Uri? = null
+
     private val _state = MutableStateFlow(AddStoriState())
     val state = _state.asStateFlow()
 
     fun addStory(deskripsi: RequestBody?, image: File?) = viewModelScope.launch {
         addStoriUsecase(deskripsi, image)
-            .onEach { res ->
+            .collect { res ->
                 res.run {
 
                     doIfFailure { m, _ ->
@@ -33,7 +34,7 @@ class AddStoryViewModel @Inject constructor(
                     }
                     doIfSuccess { respon ->
                         _state.update {
-                            it.copy(responseBody = respon)
+                            it.copy(isSuccess = !respon.error)
                         }
                     }
                     doIfLoading {
@@ -42,7 +43,7 @@ class AddStoryViewModel @Inject constructor(
                         }
                     }
                 }
-            }.launchIn(this)
+            }
     }
 
     fun setMessage(str: String?) {
